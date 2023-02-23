@@ -51,6 +51,14 @@ class IndexFinder():
                     pass
             depth += 1
         all_breadcrumbs = [url for sublist in bc_list for url in sublist]
-        df = pd.DataFrame(all_breadcrumbs)
-        df.to_csv(f'data/{self.name}.csv', index=False, header=False)
+        all_breadcrumbs2 = []
+        if 'venta' in all_breadcrumbs[0]:
+            for breadcrumb in all_breadcrumbs:
+                all_breadcrumbs2.append(breadcrumb.replace('venta', 'alquiler'))
+        else:
+            for breadcrumb in all_breadcrumbs:
+                all_breadcrumbs2.append(breadcrumb.replace('alquiler', 'venta'))
+        joined_breadcrumbs = all_breadcrumbs + all_breadcrumbs2
+        df = pd.DataFrame(joined_breadcrumbs)
+        df.to_csv(f'data/index-{self.name}.csv', index=False, header=False)
         return all_breadcrumbs
