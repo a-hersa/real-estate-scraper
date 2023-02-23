@@ -61,4 +61,4 @@ class IndexFinder():
         joined_breadcrumbs = all_breadcrumbs + all_breadcrumbs2
         df = pd.DataFrame(joined_breadcrumbs)
         df.to_csv(f'data/index-{self.name}.csv', index=False, header=False)
-        return all_breadcrumbs
+        return joined_breadcrumbs
