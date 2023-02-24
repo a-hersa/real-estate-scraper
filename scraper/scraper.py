@@ -16,6 +16,7 @@ logger.addHandler(file_handler)
 
 class Scraper():
     def __init__(self, index_name):
+        logger.debug('Initializing Scraper class')
         self.index_name = index_name.lower()
         pagelist_df = pd.read_csv(f'data/pagelist-{self.index_name}.csv', header=None)
         self.index_list = pagelist_df.iloc[:, 0].values.tolist()
@@ -23,6 +24,7 @@ class Scraper():
         self.soups = scraperapi.urls_to_soups()
 
     def from_page_get_data(self, soup):
+        logger.debug('Initializing from_page_get_data function')
         row = []
         containers = soup.find_all('article', class_='item_contains_branding')
 
@@ -103,9 +105,11 @@ class Scraper():
 
         # save into csv
         # df.to_csv('data/page-test.csv', index=False, encoding='utf-8')
+        logger.debug('Returning data in a row')
         return row
 
     def from_pagelists_get_data(self):
+        logger.debug('Initializing from_pagelists_get_data function')
         df = pd.DataFrame(columns=['id', 'time', 'province', 'county', 'city', 'area', 'neighborhood', 'title', 'type', 'price', 'parking', 'rooms', 'sqrm', 'floor', 'surface', 'elevator', 'tag', 'img', 'url'], index=None)
         for soup in self.soups:
             df.loc[len(df)] = self.from_page_get_data(soup)

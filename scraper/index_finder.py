@@ -1,7 +1,7 @@
 
 from scraper.scraperapi import Scraperapi
 import pandas as pd
-import os.path
+import logging
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.DEBUG)
@@ -15,6 +15,7 @@ logger.addHandler(file_handler)
 
 class IndexFinder():
     def __init__(self, url):
+        logger.debug('Initializing IndexFinder class')
         self.url = url
         scraperapi = Scraperapi(self.url)
         if type(self.url) is str:
@@ -24,17 +25,21 @@ class IndexFinder():
         self.name = self.soup.find('link', rel='canonical')['href'].split('/')[-2]
 
     def get_depth(self):
+        logger.debug('Initializing get_depth function')
         page_depth = len(self.soup.find('ul', class_='breadcrumb-navigation').find_all('li', class_='breadcrumb-navigation-element'))
         return page_depth
 
     def get_breadcrumbs(self):
+        logger.debug('Initializing get_breadcrumbs function')
         breadcrumbs = []
         bc_list = self.soup.find('ul', 'breadcrumb-dropdown-subitem-list').find_all('li')
         for bc in bc_list:
             breadcrumbs.append('https://www.idealista.com' + bc.a['href'])
+        logger.debug('Returning a list of breadcrumbs')
         return breadcrumbs
 
     def get_breadcrumbs_from_list(self, old_list):
+        logger.debug('Initializing get_breadcrumbs_from_list function')
         breadcrumbs = []
         for bc in self.soup:
             try:
@@ -43,11 +48,13 @@ class IndexFinder():
                 old_list.remove(old_url)
                 for crumb in bc_list:
                     breadcrumbs.append('https://www.idealista.com' + crumb.a['href'])
-            except Exception as e:
-                logging.error("Exception occurred", exc_info=True)
+            except Exception:
+                logger.exception('Exception occurred')
+        logger.debug('Returning a list of breadcrumbs')
         return breadcrumbs 
 
     def get_all_breadcrumbs(self):
+        logger.debug('Initializing get_all_breadcrumbs function')
         depth = self.get_depth()
         bc_list = [[] for x in range(6-depth)]
         bc_list[0] = self.get_breadcrumbs()
@@ -59,7 +66,7 @@ class IndexFinder():
                     for crumb in lower_crumbs:
                         bc_list[i+1].append(crumb)
                 except Exception:
-                    print('1 url without breadcrumbs reached')
+                    logger.exception('Exception occurred')
                     pass
             depth += 1
         all_breadcrumbs = [url for sublist in bc_list for url in sublist]
@@ -73,4 +80,5 @@ class IndexFinder():
         joined_breadcrumbs = all_breadcrumbs + all_breadcrumbs2
         df = pd.DataFrame(joined_breadcrumbs)
         df.to_csv(f'data/index-{self.name}.csv', index=False, header=False)
+        logger.debug('Returning a list of breadcrumbs and saved them in a csv file')
         return joined_breadcrumbs

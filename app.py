@@ -23,8 +23,10 @@ def configure():
 def main():
     configure()
     logger.debug('###### Starting main program ######')
+
     url = 'https://www.idealista.com/venta-viviendas/barcelona/maresme/'
     logger.debug(f'URL added {url}')
+    
     index_list = IndexFinder(url)
     if path.exists(f'data/index-{index_list.name}.csv'):
         logger.debug(f'Index for {index_list.name} already exists, skipping...')
