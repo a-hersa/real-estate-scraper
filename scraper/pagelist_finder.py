@@ -1,7 +1,18 @@
+
 import pandas as pd
 import math
 from scraper.scraperapi import Scraperapi
-from datetime import date
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s', '%Y-%m-%d %H:%M:%S')
+
+file_handler = logging.FileHandler('scraper.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 class PageListFinder():
     def __init__(self, index_name):
@@ -34,4 +45,6 @@ class PageListFinder():
         all_pagelists = []
         for soup in self.soups:
             all_pagelists.append(self.get_pagelist(soup))
+        df = pd.DataFrame(all_pagelists)
+        df.to_csv(f'data/pagelist-{self.name}.csv', index=False, header=False)
         return all_pagelists

@@ -1,5 +1,17 @@
+
 from scraper.scraperapi import Scraperapi
 import pandas as pd
+import os.path
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s', '%Y-%m-%d %H:%M:%S')
+
+file_handler = logging.FileHandler('scraper.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 class IndexFinder():
     def __init__(self, url):
@@ -31,8 +43,8 @@ class IndexFinder():
                 old_list.remove(old_url)
                 for crumb in bc_list:
                     breadcrumbs.append('https://www.idealista.com' + crumb.a['href'])
-            except:
-                pass
+            except Exception as e:
+                logging.error("Exception occurred", exc_info=True)
         return breadcrumbs 
 
     def get_all_breadcrumbs(self):

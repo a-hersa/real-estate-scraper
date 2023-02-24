@@ -1,8 +1,20 @@
+
 import requests
 from bs4 import BeautifulSoup
 import json
 import time
 import os
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s', '%Y-%m-%d %H:%M:%S')
+
+file_handler = logging.FileHandler('scraper.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 class Scraperapi():
     def __init__(self, url):

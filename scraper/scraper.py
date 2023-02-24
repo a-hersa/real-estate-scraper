@@ -1,11 +1,25 @@
+
 import pandas as pd
 from scraper.scraperapi import Scraperapi
 from datetime import date
+import logging
+
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+
+formatter = logging.Formatter('%(levelname)s:%(name)s:%(message)s', '%Y-%m-%d %H:%M:%S')
+
+file_handler = logging.FileHandler('scraper.log')
+file_handler.setFormatter(formatter)
+
+logger.addHandler(file_handler)
 
 class Scraper():
-    def __init__(self, all_pagelists):
-        self.all_pagelists = all_pagelists
-        scraperapi = Scraperapi(self.all_pagelists)
+    def __init__(self, index_name):
+        self.index_name = index_name.lower()
+        pagelist_df = pd.read_csv(f'data/pagelist-{self.index_name}.csv', header=None)
+        self.index_list = pagelist_df.iloc[:, 0].values.tolist()
+        scraperapi = Scraperapi(self.index_list)
         self.soups = scraperapi.urls_to_soups()
 
     def from_page_get_data(self, soup):
@@ -95,4 +109,5 @@ class Scraper():
         df = pd.DataFrame(columns=['id', 'time', 'province', 'county', 'city', 'area', 'neighborhood', 'title', 'type', 'price', 'parking', 'rooms', 'sqrm', 'floor', 'surface', 'elevator', 'tag', 'img', 'url'], index=None)
         for soup in self.soups:
             df.loc[len(df)] = self.from_page_get_data(soup)
+        df.to_csv(f'data/data-{self.index_name}.csv', index=False, header=False)
         return df

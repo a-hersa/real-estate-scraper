@@ -15,6 +15,7 @@ test/
 tasks.txt
 data/
 test.ipynb
+log/
 
 # VSCode
 .vscode
