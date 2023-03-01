@@ -1,6 +1,7 @@
 
 import pandas as pd
 from scraper.scraperapi import Scraperapi
+from scraper.scrapingant import Scrapingant
 from datetime import date
 import logging
 
@@ -20,8 +21,8 @@ class Scraper():
         self.index_name = index_name.lower()
         pagelist_df = pd.read_csv(f'data/pagelist-{self.index_name}.csv', header=None)
         self.index_list = pagelist_df.iloc[:, 0].values.tolist()
-        scraperapi = Scraperapi(self.index_list)
-        self.soups = scraperapi.urls_to_soups()
+        scraper = Scrapingant(self.index_list)
+        self.soups = scraper.urls_to_soups()
 
     def from_page_get_data(self, soup):
         logger.debug('Initializing from_page_get_data function')

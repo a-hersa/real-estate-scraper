@@ -1,5 +1,6 @@
 
 from scraper.scraperapi import Scraperapi
+from scraper.scrapingant import Scrapingant
 import pandas as pd
 import logging
 
@@ -17,11 +18,11 @@ class IndexFinder():
     def __init__(self, url):
         logger.debug('Initializing IndexFinder class')
         self.url = url
-        scraperapi = Scraperapi(self.url)
+        scraper = Scrapingant(self.url)
         if type(self.url) is str:
-            self.soup = scraperapi.url_to_soup()
+            self.soup = scraper.url_to_soup()
         else:
-            self.soup = scraperapi.urls_to_soups()
+            self.soup = scraper.urls_to_soups()
         self.name = self.soup.find('link', rel='canonical')['href'].split('/')[-2]
 
     def get_depth(self):

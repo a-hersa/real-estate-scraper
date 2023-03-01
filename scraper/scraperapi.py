@@ -26,7 +26,6 @@ class Scraperapi():
         r = requests.post(url = 'https://async.scraperapi.com/jobs', json={ 'apiKey': os.getenv('SCRAPERAPI_KEY'), 'url': self.url})
         status_url = json.loads(r.text)['statusUrl']
         logger.debug(f'Returning {status_url}')
-        logger.debug(status_url)
         return status_url
     
     def get_request(self, status_url):
@@ -35,8 +34,8 @@ class Scraperapi():
         res = json.loads(r.text)
         status = res['status']
         while status != 'finished':
-            logger.debug('Waiting 10 secs...')
-            time.sleep(10)
+            logger.debug('Waiting 30 secs...')
+            time.sleep(30)
             r = requests.get(url = status_url)
             res = json.loads(r.text)
             status = res['status']

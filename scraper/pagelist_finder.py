@@ -2,6 +2,7 @@
 import pandas as pd
 import math
 from scraper.scraperapi import Scraperapi
+from scraper.scrapingant import Scrapingant
 import logging
 
 logger = logging.getLogger(__name__)
@@ -20,8 +21,8 @@ class PageListFinder():
         self.index_name = index_name.lower()
         index_df = pd.read_csv(f'data/index-{self.index_name}.csv', header=None)
         self.index_list = index_df.iloc[:, 0].values.tolist()
-        scraperapi = Scraperapi(self.index_list)
-        self.soups = scraperapi.urls_to_soups()
+        scraper = Scrapingant(self.index_list)
+        self.soups = scraper.urls_to_soups()
         # self.name = self.soup.find('link', rel='canonical')['href'].split('/')[-2]
 
     def total_props(self, soup):
