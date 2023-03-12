@@ -17,7 +17,7 @@ logger.addHandler(file_handler)
 
 class Scrapingant():
     def __init__(self, url):
-        logger.debug('Initializing Scraperapi class')
+        logger.debug('Initializing Scrapingant class')
         self.url = url
 
     def url_to_soup(self):
@@ -25,7 +25,7 @@ class Scrapingant():
         encoded_url = requests.utils.quote(self.url, safe='')
         req_url = f'https://api.scrapingant.com/v2/general?url={encoded_url}&x-api-key={os.getenv("SCRAPINGANT_KEY")}'
         r = requests.get(req_url)
-        soup = BeautifulSoup(r.text)
+        soup = BeautifulSoup(r.text, 'lxml')
         return soup
 
     # Same methods for multiple requests
@@ -36,9 +36,9 @@ class Scrapingant():
             time.sleep(10)
             try:
                 encoded_url = requests.utils.quote(url, safe='')
-                req_url = f'https://api.scrapingant.com/v2/general?url={encoded_url}&x-api-key=os.getenv('SCRAPINGANT_KEY')'
+                req_url = f'https://api.scrapingant.com/v2/general?url={encoded_url}&x-api-key={os.getenv("SCRAPINGANT_KEY")}'
                 r = requests.get(req_url)
-                soup = BeautifulSoup(r.text)
+                soup = BeautifulSoup(r.text, 'lxml')
                 all_soups.append(soup)
             except:
                 logger.exception(f'Exception with {url} occurred')

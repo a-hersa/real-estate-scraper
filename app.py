@@ -35,13 +35,13 @@ def main():
         index_list.get_all_breadcrumbs()
         logger.debug(f'New index was generated with name ''index-{index.name}.csv''')
     
-    page_list = PageListFinder(index_list.name)
-    page_list.get_all_pagelists()
+    # page_list = PageListFinder(index_list.name)
+    # page_list.get_all_pagelists()
 
-    scraper = Scraper(index_list.name)
-    scraper.from_pagelists_get_data()
+    # scraper = Scraper(index_list.name)
+    # scraper.from_pagelists_get_data()
 
-    logger.debug('###### Ending main program ######')
+    # logger.debug('###### Ending main program ######')
     
 
 if __name__ == '__main__':
