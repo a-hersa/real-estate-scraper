@@ -40,10 +40,14 @@ class PageListFinder():
     def get_pagelist(self, soup):
         logger.debug('Initializing get_pagelist function')
         one_pagelist = []
+        url = soup.find('link', rel='canonical')['href']
+        one_pagelist.append(url)
+        logger.debug(f'url appended {url}')
         total_props = self.total_props(soup)
         total_pag = self.total_pages(total_props)
-        for i in range(total_pag):
-            one_pagelist.append(self.url+f'pagina-{i+1}.htm')
+        for i in range(total_pag-1):
+            one_pagelist.append(url+f'pagina-{i+1}.htm')
+            logger.debug(f'url appended {url}pagina-{i+1}.htm')
         logger.debug('Returning a list of resulting pagelists')
         return one_pagelist
     
